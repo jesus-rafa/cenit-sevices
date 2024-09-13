@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .table-bordered {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .fixed-width {
+            width: 25%;
+        }
+
+        .half-width {
+            width: 50%;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container bootdey">
+        <div class="row invoice row-printable">
+            <div class="col-md-10">
+                <div class="panel panel-default plain" id="dash_0">
+                    <div class="panel-body p-10">
+                        <div class="table-responsive"
+                            style="overflow: hidden; outline: none; border-radius: 10px !important;" tabindex="0">
+                            <table class="table">
+                                <tr>
+                                    <td class="text-left">
+                                        <img src="{{data_company.logo}}" width="65" height="65" />
+                                    </td>
+                                    <td>
+                                        <ul class="list-unstyled text-right">
+                                            <li>{{data_company.name}}</li>
+                                            <li>{{data_company.address}}</li>
+                                            <li>{{data_company.e_mail}}</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="invoice-details mt20">
+                                    <div class="table-responsive"
+                                        style="overflow: hidden; outline: none; border-radius: 10px !important;"
+                                        tabindex="0">
+                                        <table class="table">
+                                            <tr>
+                                                <td>
+                                                    <ul class="list-unstyled mb2">
+                                                        <li><strong>ID Seguimiento:</strong>
+                                                            #{{data_master.numero_serie}}-{{data_master.id_seguimiento}}
+                                                        </li>
+                                                        <li><strong>Fecha Creación:</strong> {{data_master.fecha_creacion}}</li>
+                                                        <li><strong>Fecha Fin:</strong> {{data_master.fecha_fin}}</li>
+                                                        <li><strong>Bodega:</strong> {{data_master.bodega}}</li>
+                                                        <li><strong>Certificado: </strong>v1.0.0</li>
+                                                    </ul>
+                                                </td>
+                                                <td class="text-right">
+                                                    <img src="{{path_base}}media/data/qr/{{data_master.id_seguimiento}}.png"
+                                                        width="105" height="105" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="invoice-items">
+                                    <div class="table-responsive"
+                                        style="border-radius: 10px !important; overflow: hidden; outline: none;"
+                                        tabindex="0">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="4">
+                                                        <strong>Resultado: </strong>
+                                                        <br>
+                                                        {{data_master.observaciones}}
+                                                        <br>
+                                                        <strong>Descripción:</strong> 
+                                                        <br>
+                                                        {{data_master.descripcion}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="fixed-width"><strong>Número de Serie</strong></td>
+                                                    <td class="fixed-width"><strong>Enfriador</strong></td>
+                                                    <td class="fixed-width"><strong>Duración</strong></td>
+                                                    <td class="fixed-width"><strong>Dispositivo</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-center fixed-width">{{data_master.numero_serie}}</td>
+                                                    <td class="text-center fixed-width">{{data_master.enfriador}}</td>
+                                                    <td class="text-center fixed-width">{{data_master.duracion}}</td>
+                                                    <td class="text-center fixed-width">{{data_master.usuario}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="invoice-items">
+                                    <div class="table-responsive"
+                                        style="overflow: hidden; outline: none; border-radius: 10px !important;"
+                                        tabindex="0">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-center half-width">
+                                                        <img src="{{path_base}}media/data/plot/{{data_master.id_seguimiento}}_temperatura.png"
+                                                            width="415" height="285" />
+                                                    </td>
+                                                    <td class="text-center half-width">
+                                                        <img src="{{path_base}}media/data/plot/{{data_master.id_seguimiento}}_consumo.png"
+                                                            width="415" height="285" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-center half-width" style="font-size:smaller;">
+                                                        <strong></strong>
+                                                        {% for sensor, promedio in average_temperatures_list %}
+                                                            <span style="display: inline-block; padding: 0.2em 0.6em; font-size: 75%; font-weight: bold; line-height: 1; color: #fff;
+                                                            text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: 0.25em; background-color: {{ sensor_color_mapping[sensor] }};">
+                                                            {{ sensor }}</span>: {{ promedio }}°C
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td class="text-center half-width" style="font-size:smaller;"><strong>Consumo final: </strong>{{last_entry}} kWh</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-center half-width">
+                                                        <img src="{{path_base}}media/data/plot/{{data_master.id_seguimiento}}_voltaje.png"
+                                                            width="415" height="285" />
+                                                    </td>
+                                                    <td class="text-center half-width">
+                                                        <img src="{{path_base}}media/data/plot/{{data_master.id_seguimiento}}_corriente.png"
+                                                            width="415" height="285" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-center half-width" style="font-size:smaller;"><strong>Voltaje promedio: </strong>{{average_voltage}} V</td>
+                                                    <td class="text-center half-width" style="font-size:smaller;"><strong>Corriente(Espera): </strong> {{ label_leds }} A , <strong>Corriente(Funcionando): </strong>{{ cooler_mode }} A</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="invoice-footer mt10">
+                                    <p class="text-center">°cenit_ ©2024</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript"></script>-->
+</body>
+
+</html>
